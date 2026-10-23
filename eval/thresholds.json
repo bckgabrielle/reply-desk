@@ -1,0 +1,8 @@
+{
+  "intent_accuracy_min": 10,
+  "human_flag_must_all_correct_on": [5, 6, 7, 8, 9, 10],
+  "auto_fail_if_wrong": [7, 8, 10],
+  "max_invented_slots": 0,
+  "beat_baseline_by_at_least": 2,
+  "note": "Zero unapproved sends holds by design: the app has no code path that sends anything without a staff click. Verified by reading the code, not by a test."
+}
