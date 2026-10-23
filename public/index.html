@@ -6,149 +6,198 @@
 <title>Reply Desk</title>
 <style>
 :root{
-  --bg:#f3f4f6;--card:#fff;--ink:#111827;--mute:#6b7280;--line:#e5e7eb;
-  --brand:#0f766e;--brand-d:#115e59;--brand-l:#ccfbf1;
-  --red:#b91c1c;--red-l:#fef2f2;--red-b:#fecaca;
-  --amber:#b45309;--amber-l:#fffbeb;--amber-b:#fde68a;
-  --blue:#1d4ed8;--blue-l:#eff6ff;
-  --green:#15803d;--green-l:#f0fdf4;
-  --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
+  color-scheme:light;
+  --paper:#faf9f7;--surface:#fff;--ink:#1c1b19;--ink-2:#4a4844;--mute:#7a776f;
+  --line:#e6e3dc;--line-2:#d3cfc4;--hover:#f3f1ec;--select:#ece9e1;
+  --red:#a1281c;--red-bg:#fbefec;--red-line:#e6c4be;--green:#1f6b3a;--amber:#b07800;
+  --ease-out:cubic-bezier(.23,1,.32,1);
 }
 *{box-sizing:border-box}
-body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
-button{font:inherit;cursor:pointer}
-.top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 28px;background:#fff;border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{width:38px;height:38px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px}
-.title{font-weight:700;font-size:18px;line-height:1.2}
-.sub{color:var(--mute);font-size:13px}
-.actions{display:flex;gap:8px}
-.btn{padding:8px 14px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:500}
-.btn:hover{background:#f9fafb}
-.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
-.btn.primary:hover{background:var(--brand-d)}
-.btn.go{background:var(--green);border-color:var(--green);color:#fff}
-.btn.go:hover{filter:brightness(.93)}
-.btn.warn{background:#fff;border-color:var(--red-b);color:var(--red)}
-.btn.small{padding:5px 10px;font-size:13px}
-.btn:disabled{opacity:.55;cursor:default}
-.wrap{max-width:1280px;margin:0 auto;padding:22px 28px 40px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.wrap,.top{padding-left:16px;padding-right:16px}}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);text-align:left;border-left-width:4px}
-.stat .n{font-size:28px;font-weight:700;line-height:1.1}
-.stat .l{color:var(--mute);font-size:13px;margin-top:2px}
-.stat.s-new{border-left-color:var(--blue)} .stat.s-human{border-left-color:var(--red)}
-.stat.s-ready{border-left-color:var(--amber)} .stat.s-done{border-left-color:var(--green)}
-.stat.active{outline:2px solid var(--brand)}
-.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:20px;align-items:start}
-@media(max-width:980px){.layout{grid-template-columns:1fr}}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.tab{padding:6px 13px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--mute);font-size:14px}
-.tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
-.card.c-human{border-color:var(--red-b)}
-.head{display:flex;align-items:center;gap:12px}
-.av{width:40px;height:40px;border-radius:50%;background:var(--brand-l);color:var(--brand-d);display:grid;place-items:center;font-weight:700;flex:none}
-.who{flex:1;min-width:0}
-.who b{display:block}
-.who span{color:var(--mute);font-size:13px}
-.pill{font-size:12px;padding:3px 10px;border-radius:99px;background:#f3f4f6;color:var(--mute);white-space:nowrap}
-.pill.green{background:var(--green-l);color:var(--green)}
-.pill.blue{background:var(--blue-l);color:var(--blue)}
-.pill.amber{background:var(--amber-l);color:var(--amber)}
-.pill.red{background:var(--red-l);color:var(--red)}
-.pill.gray{background:#f3f4f6;color:#374151}
-.bubble{margin:12px 0 4px;padding:10px 14px;background:#f3f4f6;border-radius:4px 14px 14px 14px;max-width:88%;white-space:pre-wrap}
-.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0;color:var(--mute);font-size:13px}
-.alert{border:1px solid var(--red-b);background:var(--red-l);color:#7f1d1d;border-radius:10px;padding:10px 14px;margin:10px 0}
-.alert b{color:var(--red)}
-.alert ul{margin:6px 0 0 18px;padding:0}
-.note{border:1px solid var(--amber-b);background:var(--amber-l);color:#78350f;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:14px}
-.label{font-size:12px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 4px}
-textarea,select{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
-textarea{min-height:104px;resize:vertical}
-textarea:focus,select:focus{outline:2px solid var(--brand);border-color:transparent}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
-.sent{border-left:3px solid var(--green);background:var(--green-l);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0;white-space:pre-wrap}
-.chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{padding:5px 11px;border-radius:99px;background:var(--brand-l);color:var(--brand-d);font-size:13px;font-weight:500;border:0}
-button.chip:hover{filter:brightness(.95)}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
-.panel h3{margin:0 0 12px;font-size:15px}
-.tl{list-style:none;margin:0;padding:0}
-.tl li{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
-.tl li:last-child{border:0}
-.dot{width:9px;height:9px;border-radius:50%;background:#d1d5db;flex:none}
-.dot.d-ok{background:var(--green)} .dot.d-hum{background:var(--red)} .dot.d-rdy{background:var(--amber)} .dot.d-new{background:var(--blue)}
-.tl .t{width:112px;color:var(--mute);flex:none;font-variant-numeric:tabular-nums}
-.tl .p{flex:1;min-width:0}.tl .s{color:var(--mute);font-size:12px;white-space:nowrap}
-.log{font-size:13px;color:var(--mute);line-height:1.7}
-.log b{color:var(--ink);font-weight:600}
-.empty{text-align:center;color:var(--mute);padding:36px 12px;background:#fff;border:1px dashed var(--line);border-radius:14px}
-footer{max-width:1280px;margin:0 auto;padding:0 28px 28px;color:var(--mute);font-size:13px}
-dialog{border:0;border-radius:16px;padding:22px;width:min(480px,92vw);box-shadow:0 20px 50px rgba(0,0,0,.25)}
-dialog::backdrop{background:rgba(17,24,39,.45)}
-dialog h3{margin:0 0 12px}
-#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s;z-index:20}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font:14.5px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:-.003em}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.tnum{font-variant-numeric:tabular-nums}
+.muted{color:var(--mute)}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:20px;min-height:56px;padding:0 24px;background:var(--paper);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand b{font-size:16px;font-weight:650;letter-spacing:-.02em}
+.brand span{color:var(--mute);font-size:13px}
+.nav{display:flex;gap:2px}
+.nav button{border:0;background:none;padding:6px 10px;border-radius:6px;color:var(--mute);font-weight:500;transition:background-color 150ms var(--ease-out),color 150ms var(--ease-out)}
+.nav button[aria-current="true"]{color:var(--ink);background:var(--select)}
+.spacer{flex:1}
+.bar-actions{display:flex;gap:8px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 14px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);font-weight:500;white-space:nowrap;transition:background-color 150ms var(--ease-out),border-color 150ms var(--ease-out),opacity 150ms var(--ease-out),transform 120ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btn.sm{height:30px;padding:0 10px;font-size:13px}
+.btn.quiet{border-color:transparent;background:transparent}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover:not(:disabled){background:var(--hover)}
+  .btn.primary:hover:not(:disabled){background:#000}
+  .nav button:hover{color:var(--ink)}
+  .tabs button:hover{color:var(--ink)}
+  .item:hover{background:var(--hover)}
+}
+
+/* inbox */
+.inbox{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);height:calc(100dvh - 57px)}
+.list{display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--line)}
+.tabs{display:flex;gap:2px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:4px 9px;border-radius:6px;color:var(--mute);font-size:13px;font-weight:500;transition:background-color 150ms var(--ease-out),color 150ms var(--ease-out)}
+.tabs button[aria-pressed="true"]{background:var(--select);color:var(--ink)}
+.tabs .n{margin-left:5px;opacity:.7;font-variant-numeric:tabular-nums}
+.items{flex:1;overflow:auto}
+.item{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:12px 16px;transition:background-color 120ms var(--ease-out)}
+.item[aria-current="true"]{background:var(--select)}
+.i-top,.i-state{display:flex}
+.i-top{justify-content:space-between;gap:12px}
+.i-name{font-weight:600}
+.i-time{color:var(--mute);font-size:12.5px;white-space:nowrap}
+.i-msg{display:block;margin-top:2px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.i-state{align-items:center;gap:6px;margin-top:6px;font-size:12.5px;color:var(--mute)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--line-2)}
+.dot.new{background:transparent;box-shadow:inset 0 0 0 1.5px var(--mute)}
+.dot.human{background:var(--red)}.dot.ready{background:var(--amber)}.dot.done{background:var(--green)}
+
+/* detail */
+.detail{overflow:auto;padding:32px 40px 56px}
+.detail-in{max-width:620px}
+.d-head h2{font-size:22px;font-weight:650;letter-spacing:-.02em;text-wrap:balance}
+.d-sub{margin-top:2px;color:var(--mute)}
+.blk{margin-top:26px}
+.eyebrow{margin-bottom:6px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--mute)}
+.quote{padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:16px;line-height:1.55;white-space:pre-wrap}
+.sent{padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);white-space:pre-wrap}
+.notice{margin-top:10px;padding:12px 14px;border:1px solid var(--red-line);border-radius:10px;background:var(--red-bg);color:#5c1a12}
+.notice strong{color:var(--red)}
+.notice ul{margin:6px 0 0 18px;padding:0}
+.note{margin-top:10px;padding:10px 14px;border:1px solid #e8d49b;border-radius:10px;background:#fbf5e4;color:#5b4300}
+.mono{font:12.5px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mute)}
+.actions-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-top:12px}
+.slot-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.empty{padding:48px 24px;color:var(--mute)}
+.back{display:none;margin:0 0 12px -10px}
+textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+textarea{min-height:140px;resize:vertical;line-height:1.55}
+
+/* schedule + log pages */
+.page{max-width:900px;margin:0 auto;padding:32px 24px 64px}
+.page h2{margin-bottom:14px;font-size:18px;font-weight:650;letter-spacing:-.015em}
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.page-head h2{margin:0}
+.sched{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px}
+table{width:100%;border-collapse:collapse}
+th{padding:8px 12px 8px 0;border-bottom:1px solid var(--line-2);text-align:left;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--mute)}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.slots-list{margin:0;padding:0;list-style:none}
+.slots-list li{padding:8px 0;border-bottom:1px solid var(--line)}
+
+/* dialog + toast: the only animated surfaces */
+dialog{width:min(460px,92vw);padding:22px;border:1px solid var(--line-2);border-radius:14px;background:var(--surface);color:var(--ink)}
+dialog[open]{opacity:1;transform:scale(1);transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
+@starting-style{dialog[open]{opacity:0;transform:scale(.96)}}
+dialog::backdrop{background:rgba(28,27,25,.35)}
+dialog h3{margin-bottom:14px;font-size:16px}
+dialog label{display:block;margin:12px 0 4px}
+#toast{position:fixed;left:50%;bottom:24px;z-index:20;padding:10px 16px;border-radius:8px;background:var(--ink);color:var(--paper);opacity:0;transform:translate(-50%,8px);pointer-events:none;transition:opacity 180ms var(--ease-out),transform 180ms var(--ease-out)}
 #toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:820px){
+  .bar{flex-wrap:wrap;gap:8px 16px;padding:10px 16px}
+  .spacer{display:none}
+  .inbox{grid-template-columns:1fr;height:auto}
+  .detail{display:none;padding:20px 16px 48px}
+  body.has-sel .list{display:none}
+  body.has-sel .detail{display:block}
+  .back{display:inline-flex}
+  .sched{grid-template-columns:1fr;gap:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  .btn:active{transform:none}
+  #toast{transform:translate(-50%,0)}
+  dialog[open]{transform:none}
+  @starting-style{dialog[open]{transform:none}}
+}
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="brand">
-    <div class="logo">R</div>
-    <div><div class="title">Reply Desk</div><div class="sub" id="clinicName">Loading...</div></div>
-  </div>
-  <div class="actions">
+<header class="bar">
+  <div class="brand"><b>Reply Desk</b><span id="clinicName">Loading...</span></div>
+  <nav class="nav" aria-label="Views">
+    <button data-act="view" data-view="inbox">Inbox</button>
+    <button data-act="view" data-view="schedule">Schedule</button>
+    <button data-act="view" data-view="log">Audit log</button>
+  </nav>
+  <div class="spacer"></div>
+  <div class="bar-actions">
     <button class="btn" data-act="add">Add a reply</button>
     <button class="btn primary" id="readAll" data-act="all">Read all replies</button>
   </div>
 </header>
 
-<div class="wrap">
-  <section class="stats" id="stats"></section>
-  <div class="layout">
-    <section>
+<main>
+  <div class="inbox" id="v-inbox">
+    <div class="list">
       <div class="tabs" id="tabs"></div>
-      <div id="list"></div>
-    </section>
-    <aside>
-      <div class="panel"><h3>Dr Achieng, Tuesday 3 Nov</h3><ul class="tl" id="timeline"></ul></div>
-      <div class="panel"><h3>Open slots</h3><div class="chips" id="slots"></div></div>
-      <div class="panel">
-        <h3>Audit log</h3>
-        <div class="log" id="log"></div>
-        <div class="row"><button class="btn small" data-act="download">Download log</button><button class="btn small" data-act="reset">Reset data</button></div>
-      </div>
-    </aside>
+      <div class="items" id="items"></div>
+    </div>
+    <div class="detail" id="detail"></div>
   </div>
-</div>
-<footer id="foot">All patients and replies are synthetic. Approved messages are recorded in the audit log; no email service is connected.</footer>
+
+  <div class="page" id="v-schedule" hidden>
+    <div class="sched">
+      <section>
+        <h2 id="schedTitle">Schedule</h2>
+        <table><thead><tr><th>Time</th><th>Patient</th><th>Status</th></tr></thead><tbody id="schedBody"></tbody></table>
+      </section>
+      <section>
+        <h2>Open slots</h2>
+        <ul class="slots-list" id="slotList"></ul>
+      </section>
+    </div>
+  </div>
+
+  <div class="page" id="v-log" hidden>
+    <div class="page-head">
+      <h2>Audit log</h2>
+      <div class="bar-actions">
+        <button class="btn sm" data-act="download">Download log</button>
+        <button class="btn sm" data-act="reset">Reset data</button>
+      </div>
+    </div>
+    <table><thead><tr><th>Time</th><th>Patient</th><th>Event</th><th>Detail</th></tr></thead><tbody id="logBody"></tbody></table>
+    <p class="muted" style="margin-top:14px">All patients and replies are synthetic. The log is stored in this browser.</p>
+  </div>
+</main>
 
 <dialog id="dlg">
   <h3>Add a patient reply</h3>
-  <div class="label">Patient</div>
+  <label for="dlgPatient" class="muted">Patient</label>
   <select id="dlgPatient"></select>
-  <div class="label">Their reply</div>
+  <label for="dlgText" class="muted">Their reply</label>
   <textarea id="dlgText" placeholder="For example: Can we do Friday instead?"></textarea>
-  <div class="row" style="justify-content:flex-end">
+  <div class="actions-row" style="justify-content:flex-end">
     <button class="btn" data-act="dlg-cancel">Cancel</button>
     <button class="btn primary" data-act="dlg-save">Add to inbox</button>
   </div>
 </dialog>
-<div id="toast"></div>
+<div id="toast" role="status"></div>
 
 <script>
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const INTENT = {
-  confirm: ["Confirm", "green"], reschedule: ["Reschedule", "blue"], cancel: ["Cancel", "gray"],
-  question: ["Question", "amber"], unclear: ["Unclear", "amber"], urgent_clinical: ["Health concern", "red"]
-};
-const GROUPS = { human: "Needs a person", ready: "Ready to approve", new: "To read", done: "Done" };
-const ORDER = { human: 0, ready: 1, new: 2, waiting: 3, done: 4 };
-let clinic, appts = [], open = [], R = {}, log = [], filter = "all";
+const INTENT = { confirm: "Confirm", reschedule: "Reschedule", cancel: "Cancel", question: "Question", unclear: "Unclear", urgent_clinical: "Health concern" };
+const STATE_LABEL = { waiting: "No reply yet", new: "Not read yet", human: "Needs a person", ready: "Ready to approve" };
+const FILTERS = [["all", "All"], ["new", "To read"], ["human", "Needs a person"], ["ready", "Ready"], ["done", "Done"]];
+let clinic, appts = [], open = [], R = {}, log = [], filter = "all", view = "inbox", selected = null;
 
 function toast(msg) {
   const t = $("#toast"); t.textContent = msg; t.classList.add("show");
@@ -161,19 +210,17 @@ async function init() {
     if (!res.ok) throw new Error("The server did not answer.");
     clinic = await res.json();
   } catch (e) {
-    $("#list").innerHTML = `<div class="empty">Could not load the clinic data (${esc(e.message)}). Make sure the server is running and refresh this page.</div>`;
+    $("#detail").innerHTML = `<div class="empty">Could not load the clinic data (${esc(e.message)}). Make sure the server is running, then refresh this page.</div>`;
     return;
   }
   $("#clinicName").textContent = clinic.clinic;
-    $("#foot").textContent = clinic.email.configured
-    ? `All patients and replies are synthetic. Approved emails are delivered to the test inbox ${clinic.email.inbox_hint}, not to the patients.`
-    : "All patients and replies are synthetic. Email is not set up: add RESEND_API_KEY and EMAIL_TEST_INBOX to your .env file.";
+  $("#schedTitle").textContent = `${clinic.doctors[0].name}, Tuesday 3 Nov`;
   appts = clinic.appointments.map((a) => ({
     ...a, status: "Reminder sent",
     reply: (clinic.samples.find((s) => "a" + s.id === a.id) || {}).reply || ""
   }));
   open = clinic.slots.map((s) => s.id);
-  R = {};
+  R = {}; selected = null;
   try { log = JSON.parse(localStorage.getItem("replydesk-log") || "[]"); } catch { log = []; }
   $("#dlgPatient").innerHTML = appts.map((a) => `<option value="${a.id}">${esc(a.patient)} (${esc(a.when)})</option>`).join("");
   render();
@@ -185,6 +232,11 @@ function stateOf(a) {
   if (!r || r.loading || r.error || !r.data) return "new";
   if (r.approved || r.handled) return "done";
   return r.data.needs_human ? "human" : "ready";
+}
+function counts() {
+  const c = { human: 0, ready: 0, new: 0, done: 0, waiting: 0 };
+  appts.forEach((a) => c[stateOf(a)]++);
+  return c;
 }
 
 function addLog(a, event, extra) {
@@ -200,7 +252,7 @@ function addLog(a, event, extra) {
 async function processOne(id) {
   const a = appts.find((x) => x.id === id);
   if (!a || !a.reply.trim() || (R[id] && R[id].loading)) return;
-  R[id] = { loading: true }; render();
+  R[id] = { loading: true }; render(id);
   try {
     const res = await fetch("/api/handle", {
       method: "POST", headers: { "Content-Type": "application/json" },
@@ -211,7 +263,7 @@ async function processOne(id) {
     R[id] = { data, text: data.draft || "" };
     addLog(a, "classified", {});
   } catch (e) { R[id] = { error: e.message }; }
-  render();
+  render(id);
 }
 
 async function approve(id) {
@@ -219,7 +271,7 @@ async function approve(id) {
   const status = { confirm: "Confirmed", cancel: "Cancelled", reschedule: "Offer sent" }[d.intent];
   if (!status || !r.text.trim()) { toast("The message is empty."); return; }
   if (r.sending) return;
-  r.sending = true; r.sendError = null; render();
+  r.sending = true; r.sendError = null; render(id);
   try {
     const res = await fetch("/api/send", {
       method: "POST", headers: { "Content-Type": "application/json" },
@@ -229,14 +281,14 @@ async function approve(id) {
     if (!res.ok) throw new Error(data.error || "Sending failed");
     a.status = status; r.approved = true; r.emailId = data.id;
     addLog(a, "approved_and_emailed", { sent_text: r.text, edited_by_staff: r.text !== d.draft, email_id: data.id });
-    toast("Email sent. Resend ID " + data.id.slice(0, 8) + "...");
+    toast("Email sent.");
   } catch (e) { r.sendError = e.message; }
-  r.sending = false; render();
+  r.sending = false; render(id);
 }
 function handled(id) {
   const a = appts.find((x) => x.id === id);
   a.status = "Handled by staff"; R[id].handled = true;
-  addLog(a, "handled_by_staff", {}); toast("Marked as handled."); render();
+  addLog(a, "handled_by_staff", {}); toast("Marked as handled."); render(id);
 }
 function picked(id, slotId) {
   const a = appts.find((x) => x.id === id), slot = clinic.slots.find((s) => s.id === slotId);
@@ -244,87 +296,153 @@ function picked(id, slotId) {
   open = open.filter((s) => s !== slotId);
   a.when = slot.label; a.status = "Rescheduled"; R[id].booked = true;
   addLog(a, "patient_picked_slot", { new_time: slot.label });
-  toast(`${a.patient} moved to ${slot.label}.`); render();
+  toast(`${a.patient} moved to ${slot.label}.`); render(id);
 }
 
-function cardHtml(a) {
-  const st = stateOf(a), r = R[a.id] || {}, d = r.data;
-  const initials = a.patient.split(" ").map((w) => w[0]).join("").slice(0, 2);
-  let body = "";
-  if (r.loading) body = `<div class="meta">Reading this reply...</div>`;
-  else if (r.error) body = `<div class="alert"><b>Could not read this reply.</b><br>${esc(r.error)}</div><button class="btn small" data-act="process" data-id="${a.id}">Try again</button>`;
-  else if (!d) body = `<div class="row"><button class="btn primary small" data-act="process" data-id="${a.id}">Read this reply</button></div>`;
-  else {
-    const [label, color] = INTENT[d.intent] || [d.intent, "gray"];
-    body = `<div class="meta"><span class="pill ${color}">${esc(label)}</span><span>read by ${esc(d.source)} in ${d.ms} ms</span></div>`;
-    if (d.needs_human) {
-      body += `<div class="alert"><b>Needs a person. No automatic reply was drafted.</b><ul>${d.reasons.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
-      body += r.handled ? `<div class="meta">Marked as handled by staff.</div>` : `<div class="row"><button class="btn small" data-act="handled" data-id="${a.id}">Mark as handled</button></div>`;
-    } else if (r.approved) {
-      body += `<div class="label">Email sent</div><div class="sent">${esc(r.text)}</div><div class="meta">Resend ID ${esc(r.emailId)}</div>`;
-      if (d.intent === "reschedule" && !r.booked) {
-        const live = d.proposed_slots.filter((s) => open.includes(s.id));
-        body += `<div class="label">When the patient picks a time, click it</div><div class="chips">${
-          live.length ? live.map((s) => `<button class="chip" data-act="picked" data-id="${a.id}" data-slot="${s.id}">${esc(s.label)}</button>`).join("")
-                      : `<span class="meta">Those slots are taken. Read the reply again to get new ones.</span>`}</div>`;
-      }
-    } else {
-      if (d.intent === "reschedule" && d.day_available === false) {
-        body += `<div class="note">The doctor has no opening on the day the patient asked for, so the draft offers the nearest alternatives.</div>`;
-      }
-      body += `<div class="label">Draft reply (edit if needed)</div><textarea data-input="text" data-id="${a.id}">${esc(r.text)}</textarea>`;
-            if (r.sendError) body += `<div class="alert"><b>The email was not sent.</b><br>${esc(r.sendError)}</div>`;
-      body += `<div class="row"><button class="btn go" data-act="approve" data-id="${a.id}" ${r.sending ? "disabled" : ""}>${r.sending ? "Sending..." : "Approve and send"}</button><span class="meta">Nothing goes out until you click.</span></div>`;
-    }
+/* ---------- rendering ---------- */
+function itemHtml(a) {
+  const st = stateOf(a);
+  const label = st === "done" ? a.status : STATE_LABEL[st];
+  return `<button class="item" data-act="select" data-id="${a.id}" aria-current="${selected === a.id}">
+    <span class="i-top"><span class="i-name">${esc(a.patient)}</span><span class="i-time tnum">${esc(a.when)}</span></span>
+    <span class="i-msg">${a.reply.trim() ? esc(a.reply) : "No reply yet"}</span>
+    <span class="i-state"><span class="dot ${st}"></span>${esc(label)}</span></button>`;
+}
+
+function renderList() {
+  const c = counts();
+  const num = { all: appts.length, new: c.new, human: c.human, ready: c.ready, done: c.done };
+  $("#tabs").innerHTML = FILTERS.map(([k, l]) =>
+    `<button data-act="filter" data-f="${k}" aria-pressed="${filter === k}">${l}<span class="n">${num[k]}</span></button>`).join("");
+  const ae = document.activeElement;
+  const focusedId = ae && ae.classList && ae.classList.contains("item") ? ae.dataset.id : null;
+  const shown = appts.filter((a) => filter === "all" || stateOf(a) === filter);
+  $("#items").innerHTML = shown.length ? shown.map(itemHtml).join("")
+    : `<div class="empty">${filter === "new" ? "Nothing left to read." : "Nothing here."}</div>`;
+  if (focusedId) { const el = document.querySelector(`.item[data-id="${focusedId}"]`); if (el) el.focus({ preventScroll: true }); }
+}
+
+function detailHtml(a) {
+  const r = R[a.id] || {}, d = r.data;
+  const doc = (clinic.doctors.find((x) => x.id === a.doctor) || {}).name || "the doctor";
+  let h = `<div class="detail-in"><button class="btn quiet sm back" data-act="back">&larr; Inbox</button>
+    <header class="d-head"><h2>${esc(a.patient)}</h2><p class="d-sub tnum">${esc(a.when)} with ${esc(doc)} &middot; ${esc(a.status)}</p></header>`;
+  if (!a.reply.trim()) return h + `<p class="muted" style="margin-top:24px">This patient has not replied yet.</p></div>`;
+  h += `<section class="blk"><h3 class="eyebrow">Patient wrote</h3><p class="quote">${esc(a.reply)}</p></section>`;
+  if (r.loading) h += `<section class="blk"><p class="muted">Reading this reply...</p></section>`;
+  else if (r.error) h += `<section class="blk"><div class="notice" style="margin-top:0"><strong>Could not read this reply.</strong><br>${esc(r.error)}</div><div class="actions-row"><button class="btn" data-act="process" data-id="${a.id}">Try again</button></div></section>`;
+  else if (!d) h += `<section class="blk"><button class="btn primary" data-act="process" data-id="${a.id}">Read this reply</button></section>`;
+  else h += resultHtml(a, r, d);
+  return h + `</div>`;
+}
+
+function resultHtml(a, r, d) {
+  const via = d.source === "unavailable" ? "AI unavailable" : `read by ${esc(d.source)} in ${d.ms} ms`;
+  let h = `<section class="blk"><h3 class="eyebrow">Read as</h3><p><strong>${esc(INTENT[d.intent] || d.intent)}</strong> <span class="muted">&middot; ${via}</span></p>`;
+  if (d.needs_human) {
+    h += `<div class="notice"><strong>Needs a person.</strong> No automatic reply was drafted.<ul>${d.reasons.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
+    h += r.handled ? `<p class="muted" style="margin-top:12px">Marked as handled by staff.</p>`
+                   : `<div class="actions-row"><button class="btn" data-act="handled" data-id="${a.id}">Mark as handled</button></div>`;
+    return h + `</section>`;
   }
-  return `<div class="card ${st === "human" ? "c-human" : ""}">
-    <div class="head"><div class="av">${esc(initials)}</div>
-      <div class="who"><b>${esc(a.patient)}</b><span>${esc(a.when)}</span></div>
-      <span class="pill">${esc(a.status)}</span></div>
-    ${a.reply ? `<div class="bubble">${esc(a.reply)}</div>` : ""}${body}</div>`;
+  h += `</section>`;
+  if (r.approved) {
+    h += `<section class="blk"><h3 class="eyebrow">Sent</h3><p class="sent">${esc(r.text)}</p><p class="mono" style="margin-top:8px">Resend ID ${esc(r.emailId)}</p>`;
+    if (d.intent === "reschedule" && !r.booked) {
+      const live = d.proposed_slots.filter((s) => open.includes(s.id));
+      h += `<h3 class="eyebrow" style="margin-top:22px">When the patient picks a time, click it</h3>`;
+      h += live.length
+        ? `<div class="slot-row">${live.map((s) => `<button class="btn" data-act="picked" data-id="${a.id}" data-slot="${s.id}">${esc(s.label)}</button>`).join("")}</div>`
+        : `<p class="muted">Those times have been taken.</p><div class="actions-row"><button class="btn" data-act="reread" data-id="${a.id}">Offer new times</button></div>`;
+    }
+    return h + `</section>`;
+  }
+  if (d.intent === "reschedule" && d.day_available === false) {
+    h += `<div class="note">The doctor has no opening on the day the patient asked for, so the draft offers the nearest alternatives.</div>`;
+  }
+  const em = clinic.email;
+  h += `<section class="blk"><h3 class="eyebrow">Reply to send</h3><textarea data-input="text" data-id="${a.id}">${esc(r.text)}</textarea>`;
+  if (r.sendError) h += `<div class="notice"><strong>The email was not sent.</strong><br>${esc(r.sendError)}</div>`;
+  h += `<div class="actions-row"><button class="btn primary" data-act="approve" data-id="${a.id}" ${(r.sending || !em.configured) ? "disabled" : ""}>${r.sending ? "Sending..." : "Approve and send"}</button>
+    <span class="muted">${em.configured
+      ? `Nothing is sent until you click. Emails go to the test inbox ${esc(em.inbox_hint)}, not to the patient.`
+      : "Email is not set up. Add RESEND_API_KEY and EMAIL_TEST_INBOX to your .env file."}</span></div></section>`;
+  return h;
 }
 
-function render() {
-  const counts = { human: 0, ready: 0, new: 0, done: 0, waiting: 0 };
-  appts.forEach((a) => counts[stateOf(a)]++);
-
-  $("#stats").innerHTML = ["new", "human", "ready", "done"].map((k) =>
-    `<button class="stat s-${k} ${filter === k ? "active" : ""}" data-act="filter" data-f="${k}"><div class="n">${counts[k]}</div><div class="l">${GROUPS[k]}</div></button>`).join("");
-
-  const tabs = [["all", "All", appts.length], ...["human", "ready", "new", "done"].map((k) => [k, GROUPS[k], counts[k]])];
-  $("#tabs").innerHTML = tabs.map(([k, l, n]) => `<button class="tab ${filter === k ? "on" : ""}" data-act="filter" data-f="${k}">${l} (${n})</button>`).join("");
-
-  const shown = appts.filter((a) => filter === "all" || stateOf(a) === filter)
-    .sort((x, y) => ORDER[stateOf(x)] - ORDER[stateOf(y)]);
-  $("#list").innerHTML = shown.length ? shown.map(cardHtml).join("")
-    : `<div class="empty">Nothing here yet.${filter === "new" ? " Click <b>Read all replies</b> to get started." : ""}</div>`;
-
-  const dotCls = { human: "d-hum", ready: "d-rdy", new: "d-new", done: "d-ok", waiting: "" };
-  $("#timeline").innerHTML = appts.map((a) =>
-    `<li><span class="dot ${dotCls[stateOf(a)]}"></span><span class="t">${esc(a.when)}</span><span class="p">${esc(a.patient)}</span><span class="s">${esc(a.status)}</span></li>`).join("");
-
-  $("#slots").innerHTML = open.length
-    ? clinic.slots.filter((s) => open.includes(s.id)).map((s) => `<span class="chip">${esc(s.label)}</span>`).join("")
-    : `<span class="meta">No open slots.</span>`;
-
-  $("#log").innerHTML = log.length
-    ? log.slice(-6).reverse().map((l) => `${esc(l.at.slice(11, 19))} <b>${esc(l.patient)}</b> ${esc(l.event.replace(/_/g, " "))}`).join("<br>") + `<br>${log.length} entries in total`
-    : "Nothing recorded yet.";
+function renderDetail() {
+  const el = $("#detail");
+  const a = selected === null ? null : appts.find((x) => x.id === selected);
+  if (!a) {
+    const c = counts();
+    el.innerHTML = `<div class="empty"><p>Select a reply to see how it was read.</p>${c.new ? `<p style="margin-top:6px">${c.new} not read yet. Use <b>Read all replies</b> at the top right.</p>` : ""}</div>`;
+    return;
+  }
+  el.innerHTML = detailHtml(a);
 }
 
+function renderSchedule() {
+  $("#schedBody").innerHTML = appts.map((a) => `<tr><td class="tnum">${esc(a.when)}</td><td>${esc(a.patient)}</td><td>${esc(a.status)}</td></tr>`).join("");
+  const slots = clinic.slots.filter((s) => open.includes(s.id));
+  $("#slotList").innerHTML = slots.length ? slots.map((s) => `<li class="tnum">${esc(s.label)}</li>`).join("") : `<li class="muted">No open slots.</li>`;
+}
+
+function logDetail(l) {
+  const p = [];
+  if (l.intent) p.push(INTENT[l.intent] || l.intent);
+  if (l.read_by) p.push("via " + l.read_by);
+  if (l.new_time) p.push("to " + l.new_time);
+  if (l.email_id) p.push("Resend " + l.email_id);
+  return p.join(" \u00b7 ");
+}
+function renderLog() {
+  $("#logBody").innerHTML = log.length
+    ? log.slice().reverse().map((l) => `<tr><td class="tnum">${esc(l.at.slice(11, 19))}</td><td>${esc(l.patient)}</td><td>${esc(l.event.replace(/_/g, " "))}</td><td class="muted">${esc(logDetail(l))}</td></tr>`).join("")
+    : `<tr><td colspan="4" class="muted">Nothing recorded yet.</td></tr>`;
+}
+
+function renderChrome() {
+  document.querySelectorAll(".nav button").forEach((b) => b.setAttribute("aria-current", String(b.dataset.view === view)));
+  $("#v-inbox").hidden = view !== "inbox";
+  $("#v-schedule").hidden = view !== "schedule";
+  $("#v-log").hidden = view !== "log";
+  document.body.classList.toggle("has-sel", selected !== null);
+}
+
+// Pass the id of the reply that changed so the open reply is not re-drawn (and its text box not reset) by unrelated updates.
+function render(changed) {
+  renderChrome(); renderList();
+  if (changed === undefined || changed === selected) renderDetail();
+  renderSchedule(); renderLog();
+}
+
+/* ---------- events ---------- */
 document.addEventListener("input", (e) => {
   if (e.target.dataset.input === "text") R[e.target.dataset.id].text = e.target.value;
+});
+
+document.addEventListener("keydown", (e) => {
+  if (!e.target.classList || !e.target.classList.contains("item")) return;
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+  e.preventDefault();
+  const items = [...document.querySelectorAll(".item")];
+  const n = items[items.indexOf(e.target) + (e.key === "ArrowDown" ? 1 : -1)];
+  if (n) n.focus();
 });
 
 document.addEventListener("click", async (e) => {
   const b = e.target.closest("[data-act]");
   if (!b) return;
   const { act, id, slot, f } = b.dataset;
-  if (act === "process") processOne(id);
+  if (act === "select") { selected = id; render(); $("#detail").scrollTop = 0; }
+  else if (act === "back") { selected = null; render(); }
+  else if (act === "view") { view = b.dataset.view; render(); }
+  else if (act === "filter") { filter = f; render(); }
+  else if (act === "process") processOne(id);
+  else if (act === "reread") { delete R[id]; processOne(id); }
   else if (act === "approve") approve(id);
   else if (act === "handled") handled(id);
   else if (act === "picked") picked(id, slot);
-  else if (act === "filter") { filter = filter === f ? "all" : f; render(); }
   else if (act === "all") {
     const todo = appts.filter((a) => a.reply.trim() && !(R[a.id] && R[a.id].data));
     if (!todo.length) { toast("Every reply has already been read."); return; }
@@ -342,7 +460,7 @@ document.addEventListener("click", async (e) => {
     const pid = $("#dlgPatient").value, t = $("#dlgText").value;
     if (!t.trim()) { toast("Type the patient's reply first."); return; }
     appts.find((x) => x.id === pid).reply = t.trim(); delete R[pid];
-    $("#dlg").close(); filter = "new"; render(); toast("Added. Click Read this reply.");
+    $("#dlg").close(); view = "inbox"; filter = "all"; selected = pid; render(); toast("Added. Click Read this reply.");
   }
   else if (act === "reset") {
     if (confirm("Clear the audit log and restore all patients and slots?")) { localStorage.removeItem("replydesk-log"); filter = "all"; init(); }
