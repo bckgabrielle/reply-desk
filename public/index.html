@@ -165,6 +165,9 @@ async function init() {
     return;
   }
   $("#clinicName").textContent = clinic.clinic;
+    $("#foot").textContent = clinic.email.configured
+    ? `All patients and replies are synthetic. Approved emails are delivered to the test inbox ${clinic.email.inbox_hint}, not to the patients.`
+    : "All patients and replies are synthetic. Email is not set up: add RESEND_API_KEY and EMAIL_TEST_INBOX to your .env file.";
   appts = clinic.appointments.map((a) => ({
     ...a, status: "Reminder sent",
     reply: (clinic.samples.find((s) => "a" + s.id === a.id) || {}).reply || ""
@@ -211,14 +214,24 @@ async function processOne(id) {
   render();
 }
 
-function approve(id) {
+async function approve(id) {
   const a = appts.find((x) => x.id === id), r = R[id], d = r.data;
   const status = { confirm: "Confirmed", cancel: "Cancelled", reschedule: "Offer sent" }[d.intent];
   if (!status || !r.text.trim()) { toast("The message is empty."); return; }
-  a.status = status; r.approved = true;
-  addLog(a, "approved_and_recorded", { sent_text: r.text, edited_by_staff: r.text !== d.draft });
-  toast("Approved and recorded in the audit log.");
-  render();
+  if (r.sending) return;
+  r.sending = true; r.sendError = null; render();
+  try {
+    const res = await fetch("/api/send", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ appointment_id: id, text: r.text })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Sending failed");
+    a.status = status; r.approved = true; r.emailId = data.id;
+    addLog(a, "approved_and_emailed", { sent_text: r.text, edited_by_staff: r.text !== d.draft, email_id: data.id });
+    toast("Email sent. Resend ID " + data.id.slice(0, 8) + "...");
+  } catch (e) { r.sendError = e.message; }
+  r.sending = false; render();
 }
 function handled(id) {
   const a = appts.find((x) => x.id === id);
@@ -248,7 +261,7 @@ function cardHtml(a) {
       body += `<div class="alert"><b>Needs a person. No automatic reply was drafted.</b><ul>${d.reasons.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
       body += r.handled ? `<div class="meta">Marked as handled by staff.</div>` : `<div class="row"><button class="btn small" data-act="handled" data-id="${a.id}">Mark as handled</button></div>`;
     } else if (r.approved) {
-      body += `<div class="label">Message recorded</div><div class="sent">${esc(r.text)}</div>`;
+      body += `<div class="label">Email sent</div><div class="sent">${esc(r.text)}</div><div class="meta">Resend ID ${esc(r.emailId)}</div>`;
       if (d.intent === "reschedule" && !r.booked) {
         const live = d.proposed_slots.filter((s) => open.includes(s.id));
         body += `<div class="label">When the patient picks a time, click it</div><div class="chips">${
@@ -260,7 +273,8 @@ function cardHtml(a) {
         body += `<div class="note">The doctor has no opening on the day the patient asked for, so the draft offers the nearest alternatives.</div>`;
       }
       body += `<div class="label">Draft reply (edit if needed)</div><textarea data-input="text" data-id="${a.id}">${esc(r.text)}</textarea>`;
-      body += `<div class="row"><button class="btn go" data-act="approve" data-id="${a.id}">Approve and send</button><span class="meta">Nothing goes out until you click.</span></div>`;
+            if (r.sendError) body += `<div class="alert"><b>The email was not sent.</b><br>${esc(r.sendError)}</div>`;
+      body += `<div class="row"><button class="btn go" data-act="approve" data-id="${a.id}" ${r.sending ? "disabled" : ""}>${r.sending ? "Sending..." : "Approve and send"}</button><span class="meta">Nothing goes out until you click.</span></div>`;
     }
   }
   return `<div class="card ${st === "human" ? "c-human" : ""}">
