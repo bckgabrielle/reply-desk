@@ -1,0 +1,12 @@
+{
+  "name": "reply-desk",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A clinic front-desk reply assistant",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/core.test.js && node test/email_test.js",
+    "eval": "node eval/run.js",
+    "eval:baseline": "node eval/run.js --keywords"
+  }
+}
