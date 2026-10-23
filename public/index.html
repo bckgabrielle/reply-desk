@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reply Desk</title>
+<style>
+:root{
+  --bg:#f3f4f6;--card:#fff;--ink:#111827;--mute:#6b7280;--line:#e5e7eb;
+  --brand:#0f766e;--brand-d:#115e59;--brand-l:#ccfbf1;
+  --red:#b91c1c;--red-l:#fef2f2;--red-b:#fecaca;
+  --amber:#b45309;--amber-l:#fffbeb;--amber-b:#fde68a;
+  --blue:#1d4ed8;--blue-l:#eff6ff;
+  --green:#15803d;--green-l:#f0fdf4;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 28px;background:#fff;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:38px;height:38px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px}
+.title{font-weight:700;font-size:18px;line-height:1.2}
+.sub{color:var(--mute);font-size:13px}
+.actions{display:flex;gap:8px}
+.btn{padding:8px 14px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:500}
+.btn:hover{background:#f9fafb}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand-d)}
+.btn.go{background:var(--green);border-color:var(--green);color:#fff}
+.btn.go:hover{filter:brightness(.93)}
+.btn.warn{background:#fff;border-color:var(--red-b);color:var(--red)}
+.btn.small{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.55;cursor:default}
+.wrap{max-width:1280px;margin:0 auto;padding:22px 28px 40px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.wrap,.top{padding-left:16px;padding-right:16px}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);text-align:left;border-left-width:4px}
+.stat .n{font-size:28px;font-weight:700;line-height:1.1}
+.stat .l{color:var(--mute);font-size:13px;margin-top:2px}
+.stat.s-new{border-left-color:var(--blue)} .stat.s-human{border-left-color:var(--red)}
+.stat.s-ready{border-left-color:var(--amber)} .stat.s-done{border-left-color:var(--green)}
+.stat.active{outline:2px solid var(--brand)}
+.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:20px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{padding:6px 13px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--mute);font-size:14px}
+.tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card.c-human{border-color:var(--red-b)}
+.head{display:flex;align-items:center;gap:12px}
+.av{width:40px;height:40px;border-radius:50%;background:var(--brand-l);color:var(--brand-d);display:grid;place-items:center;font-weight:700;flex:none}
+.who{flex:1;min-width:0}
+.who b{display:block}
+.who span{color:var(--mute);font-size:13px}
+.pill{font-size:12px;padding:3px 10px;border-radius:99px;background:#f3f4f6;color:var(--mute);white-space:nowrap}
+.pill.green{background:var(--green-l);color:var(--green)}
+.pill.blue{background:var(--blue-l);color:var(--blue)}
+.pill.amber{background:var(--amber-l);color:var(--amber)}
+.pill.red{background:var(--red-l);color:var(--red)}
+.pill.gray{background:#f3f4f6;color:#374151}
+.bubble{margin:12px 0 4px;padding:10px 14px;background:#f3f4f6;border-radius:4px 14px 14px 14px;max-width:88%;white-space:pre-wrap}
+.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0;color:var(--mute);font-size:13px}
+.alert{border:1px solid var(--red-b);background:var(--red-l);color:#7f1d1d;border-radius:10px;padding:10px 14px;margin:10px 0}
+.alert b{color:var(--red)}
+.alert ul{margin:6px 0 0 18px;padding:0}
+.note{border:1px solid var(--amber-b);background:var(--amber-l);color:#78350f;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:14px}
+.label{font-size:12px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 4px}
+textarea,select{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+textarea{min-height:104px;resize:vertical}
+textarea:focus,select:focus{outline:2px solid var(--brand);border-color:transparent}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.sent{border-left:3px solid var(--green);background:var(--green-l);border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0;white-space:pre-wrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:5px 11px;border-radius:99px;background:var(--brand-l);color:var(--brand-d);font-size:13px;font-weight:500;border:0}
+button.chip:hover{filter:brightness(.95)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.panel h3{margin:0 0 12px;font-size:15px}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.tl li:last-child{border:0}
+.dot{width:9px;height:9px;border-radius:50%;background:#d1d5db;flex:none}
+.dot.d-ok{background:var(--green)} .dot.d-hum{background:var(--red)} .dot.d-rdy{background:var(--amber)} .dot.d-new{background:var(--blue)}
+.tl .t{width:112px;color:var(--mute);flex:none;font-variant-numeric:tabular-nums}
+.tl .p{flex:1;min-width:0}.tl .s{color:var(--mute);font-size:12px;white-space:nowrap}
+.log{font-size:13px;color:var(--mute);line-height:1.7}
+.log b{color:var(--ink);font-weight:600}
+.empty{text-align:center;color:var(--mute);padding:36px 12px;background:#fff;border:1px dashed var(--line);border-radius:14px}
+footer{max-width:1280px;margin:0 auto;padding:0 28px 28px;color:var(--mute);font-size:13px}
+dialog{border:0;border-radius:16px;padding:22px;width:min(480px,92vw);box-shadow:0 20px 50px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(17,24,39,.45)}
+dialog h3{margin:0 0 12px}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s;z-index:20}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div class="logo">R</div>
+    <div><div class="title">Reply Desk</div><div class="sub" id="clinicName">Loading...</div></div>
+  </div>
+  <div class="actions">
+    <button class="btn" data-act="add">Add a reply</button>
+    <button class="btn primary" id="readAll" data-act="all">Read all replies</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="stats" id="stats"></section>
+  <div class="layout">
+    <section>
+      <div class="tabs" id="tabs"></div>
+      <div id="list"></div>
+    </section>
+    <aside>
+      <div class="panel"><h3>Dr Achieng, Tuesday 3 Nov</h3><ul class="tl" id="timeline"></ul></div>
+      <div class="panel"><h3>Open slots</h3><div class="chips" id="slots"></div></div>
+      <div class="panel">
+        <h3>Audit log</h3>
+        <div class="log" id="log"></div>
+        <div class="row"><button class="btn small" data-act="download">Download log</button><button class="btn small" data-act="reset">Reset data</button></div>
+      </div>
+    </aside>
+  </div>
+</div>
+<footer>All patients and replies are synthetic. Approved messages are recorded in the audit log; no email service is connected.</footer>
+
+<dialog id="dlg">
+  <h3>Add a patient reply</h3>
+  <div class="label">Patient</div>
+  <select id="dlgPatient"></select>
+  <div class="label">Their reply</div>
+  <textarea id="dlgText" placeholder="For example: Can we do Friday instead?"></textarea>
+  <div class="row" style="justify-content:flex-end">
+    <button class="btn" data-act="dlg-cancel">Cancel</button>
+    <button class="btn primary" data-act="dlg-save">Add to inbox</button>
+  </div>
+</dialog>
+<div id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const INTENT = {
+  confirm: ["Confirm", "green"], reschedule: ["Reschedule", "blue"], cancel: ["Cancel", "gray"],
+  question: ["Question", "amber"], unclear: ["Unclear", "amber"], urgent_clinical: ["Health concern", "red"]
+};
+const GROUPS = { human: "Needs a person", ready: "Ready to approve", new: "To read", done: "Done" };
+const ORDER = { human: 0, ready: 1, new: 2, waiting: 3, done: 4 };
+let clinic, appts = [], open = [], R = {}, log = [], filter = "all";
+
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+async function init() {
+  try {
+    const res = await fetch("/api/clinic");
+    if (!res.ok) throw new Error("The server did not answer.");
+    clinic = await res.json();
+  } catch (e) {
+    $("#list").innerHTML = `<div class="empty">Could not load the clinic data (${esc(e.message)}). Make sure the server is running and refresh this page.</div>`;
+    return;
+  }
+  $("#clinicName").textContent = clinic.clinic;
+  appts = clinic.appointments.map((a) => ({
+    ...a, status: "Reminder sent",
+    reply: (clinic.samples.find((s) => "a" + s.id === a.id) || {}).reply || ""
+  }));
+  open = clinic.slots.map((s) => s.id);
+  R = {};
+  try { log = JSON.parse(localStorage.getItem("replydesk-log") || "[]"); } catch { log = []; }
+  $("#dlgPatient").innerHTML = appts.map((a) => `<option value="${a.id}">${esc(a.patient)} (${esc(a.when)})</option>`).join("");
+  render();
+}
+
+function stateOf(a) {
+  const r = R[a.id];
+  if (!a.reply.trim()) return "waiting";
+  if (!r || r.loading || r.error || !r.data) return "new";
+  if (r.approved || r.handled) return "done";
+  return r.data.needs_human ? "human" : "ready";
+}
+
+function addLog(a, event, extra) {
+  const r = R[a.id] && R[a.id].data;
+  log.push({
+    at: new Date().toISOString(), appointment_id: a.id, patient: a.patient, event, patient_reply: a.reply,
+    intent: r ? r.intent : null, read_by: r ? r.source : null, needs_human: r ? r.needs_human : null,
+    reasons: r ? r.reasons : null, ...extra
+  });
+  try { localStorage.setItem("replydesk-log", JSON.stringify(log)); } catch {}
+}
+
+async function processOne(id) {
+  const a = appts.find((x) => x.id === id);
+  if (!a || !a.reply.trim() || (R[id] && R[id].loading)) return;
+  R[id] = { loading: true }; render();
+  try {
+    const res = await fetch("/api/handle", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reply: a.reply, appointment_id: id, open_slot_ids: open })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Request failed");
+    R[id] = { data, text: data.draft || "" };
+    addLog(a, "classified", {});
+  } catch (e) { R[id] = { error: e.message }; }
+  render();
+}
+
+function approve(id) {
+  const a = appts.find((x) => x.id === id), r = R[id], d = r.data;
+  const status = { confirm: "Confirmed", cancel: "Cancelled", reschedule: "Offer sent" }[d.intent];
+  if (!status || !r.text.trim()) { toast("The message is empty."); return; }
+  a.status = status; r.approved = true;
+  addLog(a, "approved_and_recorded", { sent_text: r.text, edited_by_staff: r.text !== d.draft });
+  toast("Approved and recorded in the audit log.");
+  render();
+}
+function handled(id) {
+  const a = appts.find((x) => x.id === id);
+  a.status = "Handled by staff"; R[id].handled = true;
+  addLog(a, "handled_by_staff", {}); toast("Marked as handled."); render();
+}
+function picked(id, slotId) {
+  const a = appts.find((x) => x.id === id), slot = clinic.slots.find((s) => s.id === slotId);
+  if (!slot || !open.includes(slotId)) return;
+  open = open.filter((s) => s !== slotId);
+  a.when = slot.label; a.status = "Rescheduled"; R[id].booked = true;
+  addLog(a, "patient_picked_slot", { new_time: slot.label });
+  toast(`${a.patient} moved to ${slot.label}.`); render();
+}
+
+function cardHtml(a) {
+  const st = stateOf(a), r = R[a.id] || {}, d = r.data;
+  const initials = a.patient.split(" ").map((w) => w[0]).join("").slice(0, 2);
+  let body = "";
+  if (r.loading) body = `<div class="meta">Reading this reply...</div>`;
+  else if (r.error) body = `<div class="alert"><b>Could not read this reply.</b><br>${esc(r.error)}</div><button class="btn small" data-act="process" data-id="${a.id}">Try again</button>`;
+  else if (!d) body = `<div class="row"><button class="btn primary small" data-act="process" data-id="${a.id}">Read this reply</button></div>`;
+  else {
+    const [label, color] = INTENT[d.intent] || [d.intent, "gray"];
+    body = `<div class="meta"><span class="pill ${color}">${esc(label)}</span><span>read by ${esc(d.source)} in ${d.ms} ms</span></div>`;
+    if (d.needs_human) {
+      body += `<div class="alert"><b>Needs a person. No automatic reply was drafted.</b><ul>${d.reasons.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
+      body += r.handled ? `<div class="meta">Marked as handled by staff.</div>` : `<div class="row"><button class="btn small" data-act="handled" data-id="${a.id}">Mark as handled</button></div>`;
+    } else if (r.approved) {
+      body += `<div class="label">Message recorded</div><div class="sent">${esc(r.text)}</div>`;
+      if (d.intent === "reschedule" && !r.booked) {
+        const live = d.proposed_slots.filter((s) => open.includes(s.id));
+        body += `<div class="label">When the patient picks a time, click it</div><div class="chips">${
+          live.length ? live.map((s) => `<button class="chip" data-act="picked" data-id="${a.id}" data-slot="${s.id}">${esc(s.label)}</button>`).join("")
+                      : `<span class="meta">Those slots are taken. Read the reply again to get new ones.</span>`}</div>`;
+      }
+    } else {
+      if (d.intent === "reschedule" && d.day_available === false) {
+        body += `<div class="note">The doctor has no opening on the day the patient asked for, so the draft offers the nearest alternatives.</div>`;
+      }
+      body += `<div class="label">Draft reply (edit if needed)</div><textarea data-input="text" data-id="${a.id}">${esc(r.text)}</textarea>`;
+      body += `<div class="row"><button class="btn go" data-act="approve" data-id="${a.id}">Approve and send</button><span class="meta">Nothing goes out until you click.</span></div>`;
+    }
+  }
+  return `<div class="card ${st === "human" ? "c-human" : ""}">
+    <div class="head"><div class="av">${esc(initials)}</div>
+      <div class="who"><b>${esc(a.patient)}</b><span>${esc(a.when)}</span></div>
+      <span class="pill">${esc(a.status)}</span></div>
+    ${a.reply ? `<div class="bubble">${esc(a.reply)}</div>` : ""}${body}</div>`;
+}
+
+function render() {
+  const counts = { human: 0, ready: 0, new: 0, done: 0, waiting: 0 };
+  appts.forEach((a) => counts[stateOf(a)]++);
+
+  $("#stats").innerHTML = ["new", "human", "ready", "done"].map((k) =>
+    `<button class="stat s-${k} ${filter === k ? "active" : ""}" data-act="filter" data-f="${k}"><div class="n">${counts[k]}</div><div class="l">${GROUPS[k]}</div></button>`).join("");
+
+  const tabs = [["all", "All", appts.length], ...["human", "ready", "new", "done"].map((k) => [k, GROUPS[k], counts[k]])];
+  $("#tabs").innerHTML = tabs.map(([k, l, n]) => `<button class="tab ${filter === k ? "on" : ""}" data-act="filter" data-f="${k}">${l} (${n})</button>`).join("");
+
+  const shown = appts.filter((a) => filter === "all" || stateOf(a) === filter)
+    .sort((x, y) => ORDER[stateOf(x)] - ORDER[stateOf(y)]);
+  $("#list").innerHTML = shown.length ? shown.map(cardHtml).join("")
+    : `<div class="empty">Nothing here yet.${filter === "new" ? " Click <b>Read all replies</b> to get started." : ""}</div>`;
+
+  const dotCls = { human: "d-hum", ready: "d-rdy", new: "d-new", done: "d-ok", waiting: "" };
+  $("#timeline").innerHTML = appts.map((a) =>
+    `<li><span class="dot ${dotCls[stateOf(a)]}"></span><span class="t">${esc(a.when)}</span><span class="p">${esc(a.patient)}</span><span class="s">${esc(a.status)}</span></li>`).join("");
+
+  $("#slots").innerHTML = open.length
+    ? clinic.slots.filter((s) => open.includes(s.id)).map((s) => `<span class="chip">${esc(s.label)}</span>`).join("")
+    : `<span class="meta">No open slots.</span>`;
+
+  $("#log").innerHTML = log.length
+    ? log.slice(-6).reverse().map((l) => `${esc(l.at.slice(11, 19))} <b>${esc(l.patient)}</b> ${esc(l.event.replace(/_/g, " "))}`).join("<br>") + `<br>${log.length} entries in total`
+    : "Nothing recorded yet.";
+}
+
+document.addEventListener("input", (e) => {
+  if (e.target.dataset.input === "text") R[e.target.dataset.id].text = e.target.value;
+});
+
+document.addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-act]");
+  if (!b) return;
+  const { act, id, slot, f } = b.dataset;
+  if (act === "process") processOne(id);
+  else if (act === "approve") approve(id);
+  else if (act === "handled") handled(id);
+  else if (act === "picked") picked(id, slot);
+  else if (act === "filter") { filter = filter === f ? "all" : f; render(); }
+  else if (act === "all") {
+    const todo = appts.filter((a) => a.reply.trim() && !(R[a.id] && R[a.id].data));
+    if (!todo.length) { toast("Every reply has already been read."); return; }
+    b.disabled = true;
+    for (let i = 0; i < todo.length; i++) {
+      b.textContent = `Reading ${i + 1} of ${todo.length}...`;
+      await processOne(todo[i].id);
+      await new Promise((r) => setTimeout(r, 1200));
+    }
+    b.textContent = "Read all replies"; b.disabled = false;
+  }
+  else if (act === "add") { $("#dlgText").value = ""; $("#dlg").showModal(); }
+  else if (act === "dlg-cancel") $("#dlg").close();
+  else if (act === "dlg-save") {
+    const pid = $("#dlgPatient").value, t = $("#dlgText").value;
+    if (!t.trim()) { toast("Type the patient's reply first."); return; }
+    appts.find((x) => x.id === pid).reply = t.trim(); delete R[pid];
+    $("#dlg").close(); filter = "new"; render(); toast("Added. Click Read this reply.");
+  }
+  else if (act === "reset") {
+    if (confirm("Clear the audit log and restore all patients and slots?")) { localStorage.removeItem("replydesk-log"); filter = "all"; init(); }
+  }
+  else if (act === "download") {
+    const blob = new Blob([JSON.stringify(log, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "reply-desk-audit-log.json"; a.click();
+  }
+});
+init();
+</script>
+</body>
+</html>
