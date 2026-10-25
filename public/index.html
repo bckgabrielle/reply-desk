@@ -21,7 +21,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tnum{font-variant-numeric:tabular-nums}
 .muted{color:var(--mute)}
 
-/* top bar */
 .bar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:20px;min-height:56px;padding:0 24px;background:var(--paper);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:baseline;gap:10px}
 .brand b{font-size:16px;font-weight:650;letter-spacing:-.02em}
@@ -32,7 +31,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 .spacer{flex:1}
 .bar-actions{display:flex;gap:8px}
 
-/* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 14px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);font-weight:500;white-space:nowrap;transition:background-color 150ms var(--ease-out),border-color 150ms var(--ease-out),opacity 150ms var(--ease-out),transform 120ms var(--ease-out)}
 .btn:active{transform:scale(.97)}
 .btn.primary{background:var(--ink);border-color:var(--ink);color:var(--paper)}
@@ -47,7 +45,6 @@ button{font:inherit;color:inherit;cursor:pointer}
   .item:hover{background:var(--hover)}
 }
 
-/* inbox */
 .inbox{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);height:calc(100dvh - 57px)}
 .list{display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--line)}
 .tabs{display:flex;gap:2px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--line)}
@@ -67,7 +64,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 .dot.new{background:transparent;box-shadow:inset 0 0 0 1.5px var(--mute)}
 .dot.human{background:var(--red)}.dot.ready{background:var(--amber)}.dot.done{background:var(--green)}
 
-/* detail */
 .detail{overflow:auto;padding:32px 40px 56px}
 .detail-in{max-width:620px}
 .d-head h2{font-size:22px;font-weight:650;letter-spacing:-.02em;text-wrap:balance}
@@ -88,7 +84,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
 textarea{min-height:140px;resize:vertical;line-height:1.55}
 
-/* schedule + log pages */
 .page{max-width:900px;margin:0 auto;padding:32px 24px 64px}
 .page h2{margin-bottom:14px;font-size:18px;font-weight:650;letter-spacing:-.015em}
 .page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
@@ -100,7 +95,6 @@ td{padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:t
 .slots-list{margin:0;padding:0;list-style:none}
 .slots-list li{padding:8px 0;border-bottom:1px solid var(--line)}
 
-/* dialog + toast: the only animated surfaces */
 dialog{width:min(460px,92vw);padding:22px;border:1px solid var(--line-2);border-radius:14px;background:var(--surface);color:var(--ink)}
 dialog[open]{opacity:1;transform:scale(1);transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
 @starting-style{dialog[open]{opacity:0;transform:scale(.96)}}
@@ -299,7 +293,6 @@ function picked(id, slotId) {
   toast(`${a.patient} moved to ${slot.label}.`); render(id);
 }
 
-/* ---------- rendering ---------- */
 function itemHtml(a) {
   const st = stateOf(a);
   const label = st === "done" ? a.status : STATE_LABEL[st];
@@ -409,14 +402,12 @@ function renderChrome() {
   document.body.classList.toggle("has-sel", selected !== null);
 }
 
-// Pass the id of the reply that changed so the open reply is not re-drawn (and its text box not reset) by unrelated updates.
 function render(changed) {
   renderChrome(); renderList();
   if (changed === undefined || changed === selected) renderDetail();
   renderSchedule(); renderLog();
 }
 
-/* ---------- events ---------- */
 document.addEventListener("input", (e) => {
   if (e.target.dataset.input === "text") R[e.target.dataset.id].text = e.target.value;
 });
@@ -450,7 +441,7 @@ document.addEventListener("click", async (e) => {
     for (let i = 0; i < todo.length; i++) {
       b.textContent = `Reading ${i + 1} of ${todo.length}...`;
       await processOne(todo[i].id);
-      await new Promise((r) => setTimeout(r, 1200));
+      await new Promise((r) => setTimeout(r, 2500));
     }
     b.textContent = "Read all replies"; b.disabled = false;
   }
